@@ -1,40 +1,41 @@
-//your JS code here. If required.
-const progress = document.getElementById("progress");
+//your JS code here.
+
 const prev = document.getElementById("prev");
 const next = document.getElementById("next");
-const circles = document.querySelectorAll(".circle");
+const progress = document.getElementById("progress");
 
-let currentActive = 1;
+let current = 1;
+const total = 5;
 
-next.addEventListener("click", () => {
-  currentActive++;
-  if (currentActive > circles.length) {
-    currentActive = circles.length;
+next.addEventListener("click", function () {
+  if (current < total) {
+    current++;
+    update();
   }
-  update();
 });
 
-prev.addEventListener("click", () => {
-  currentActive--;
-  if (currentActive < 1) {
-    currentActive = 1;
+prev.addEventListener("click", function () {
+  if (current > 1) {
+    current--;
+    update();
   }
-  update();
 });
 
 function update() {
-  circles.forEach((circle, index) => {
-    if (index < currentActive) {
+  for (let i = 1; i <= total; i++) {
+    const circle = document.getElementById("circle-" + i);
+
+    if (i <= current) {
       circle.classList.add("active");
     } else {
       circle.classList.remove("active");
     }
-  });
+  }
 
-  const actives = document.querySelectorAll(".circle.active");
-  progress.style.width =
-    ((actives.length - 1) / (circles.length - 1)) * 100 + "%";
+  // update progress width
+  progress.style.width = ((current - 1) / (total - 1)) * 100 + "%";
 
-  prev.disabled = currentActive === 1;
-  next.disabled = currentActive === circles.length;
+  // button states
+  prev.disabled = current === 1;
+  next.disabled = current === total;
 }
